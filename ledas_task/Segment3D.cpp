@@ -11,13 +11,13 @@ bool Segment3D::contain(const Vector3D& v) const {
 	Vector3D v1(end_, -1, start_);
 	Vector3D v2(v, -1, start_);
 	Vector3D v3 = v1.cross(v2);
-	if (std::sqrt(v3.dot(v3)) / (*this).length() > 1e-13) return false; //такой критерий для работы с иррациональными числами
+	if (std::sqrt(v3.dot(v3)) / (*this).length() > 1e-13) return false; //ГІГ ГЄГ®Г© ГЄГ°ГЁГІГҐГ°ГЁГ© Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± ГЁГ°Г°Г Г¶ГЁГ®Г­Г Г«ГјГ­Г»Г¬ГЁ Г·ГЁГ±Г«Г Г¬ГЁ
 	double projection = v2.dot(v1);
 	return  0 <= projection && projection <= v1.dot(v1);
 }
 
 std::optional<Vector3D> Segment3D::intersect(const Segment3D& s) const {
-	//проверка на вырожденность отрезков (сначала обоих отрезков, потом по отдельности)
+	//РїСЂРѕРІРµСЂРєР° РЅР° РІС‹СЂРѕР¶РґРµРЅРЅРѕСЃС‚СЊ РѕС‚СЂРµР·РєРѕРІ (СЃРЅР°С‡Р°Р»Р° РѕР±РѕРёС… РѕС‚СЂРµР·РєРѕРІ, РїРѕС‚РѕРј РїРѕ РѕС‚РґРµР»СЊРЅРѕСЃС‚Рё)
 	if ((*this).length() == 0 && s.length() == 0) {
 		return (start_ == s.start()) ? std::optional<Vector3D>(start_) : std::nullopt;
 	}
@@ -27,31 +27,31 @@ std::optional<Vector3D> Segment3D::intersect(const Segment3D& s) const {
 	else if (s.length() == 0) {
 		return (*this).contain(s.start()) ? std::optional<Vector3D>(s.start()) : std::nullopt;
 	}
-	//dir1 - направляющий вектор первого отрезка
-	//dir2 - направляющий вектор второго отрезка
-	//dir3 - вектор между точками отрезков (например start)
-	//dircross - векторное произведение dir1 и dir2
+	//dir1 - РЅР°РїСЂР°РІР»СЏСЋС‰РёР№ РІРµРєС‚РѕСЂ РїРµСЂРІРѕРіРѕ РѕС‚СЂРµР·РєР°
+    //dir2 - РЅР°РїСЂР°РІР»СЏСЋС‰РёР№ РІРµРєС‚РѕСЂ РІС‚РѕСЂРѕРіРѕ РѕС‚СЂРµР·РєР°
+    //dir3 - РІРµРєС‚РѕСЂ РјРµР¶РґСѓ С‚РѕС‡РєР°РјРё РѕС‚СЂРµР·РєРѕРІ (РЅР°РїСЂРёРјРµСЂ start)
+    //dircross - РІРµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ dir1 Рё dir2
 	Vector3D dir1(end_, -1, start_);
 	Vector3D dir2(s.end(), -1, s.start());
 	Vector3D dircross = dir1.cross(dir2);
 	Vector3D dir3(s.start(), -1, start_);
-	//проверка компланарности dir1, dir2, dir3
+	//РїСЂРѕРІРµСЂРєР° РєРѕРјРїР»Р°РЅР°СЂРЅРѕСЃС‚Рё dir1, dir2, dir3
 	if (dircross.dot(dir3) != 0) return std::nullopt;
 
-	//n - перпендикулярный вектор к dir1 и в плоскости векторов, направляющих отрезки 
+	//n - РїРµСЂРїРµРЅРґРёРєСѓР»СЏСЂРЅС‹Р№ РІРµРєС‚РѕСЂ Рє dir1 Рё Рє РЅРѕСЂРјР°Р»Рё РїР»РѕСЃРєРѕСЃС‚Рё РІРµРєС‚РѕСЂРѕРІ, РЅР°РїСЂР°РІР»СЏСЋС‰РёС… РѕС‚СЂРµР·РєРё 
 	Vector3D n = dir1.cross(dircross);
 	double denom = n.dot(dir2);
-	//проверяем параллельность направляющих векторов
+	//РїСЂРѕРІРµСЂСЏРµРј РїР°СЂР°Р»Р»РµР»СЊРЅРѕСЃС‚СЊ РЅР°РїСЂР°РІР»СЏСЋС‰РёС… РІРµРєС‚РѕСЂРѕРІ (Рё РІ СЃР»СѓС‡Р°Рµ РїР°СЂР°Р»Р»РµР»СЊРЅРѕСЃС‚Рё РїСЂРёРЅР°РґР»РµР¶РЅРѕСЃС‚СЊ РіСЂР°РЅРёС‡РЅС‹С… С‚РѕС‡РµРє)
 	if (denom == 0) {
 		if (s.contain(start_)) return start_;
 		else if (s.contain(end_)) return end_;
 		else if ((*this).contain(s.start())) return s.start();
 		else return std::nullopt;
 	}
-	//находим пересечение прямых, на которых лежат отрезки
+	//РЅР°С…РѕРґРёРј РїРµСЂРµСЃРµС‡РµРЅРёРµ РїСЂСЏРјС‹С…, РЅР° РєРѕС‚РѕСЂС‹С… Р»РµР¶Р°С‚ РѕС‚СЂРµР·РєРё
 	double param2 = - n.dot(dir3) / denom;
 	Vector3D intersec(s.start(), param2, dir2);
-	//если intersec (точка пересечения прямых) не принадлежит обоим отрезкам - пересечения нет
+	//РµСЃР»Рё intersec (С‚РѕС‡РєР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РїСЂСЏРјС‹С…) РЅРµ РїСЂРёРЅР°РґР»РµР¶РёС‚ РѕР±РѕРёРј РѕС‚СЂРµР·РєР°Рј - РїРµСЂРµСЃРµС‡РµРЅРёСЏ РЅРµС‚
 	return (s.contain(intersec) && (*this).contain(intersec)) ? 
 		std::optional<Vector3D>(intersec) : std::nullopt;
 }
