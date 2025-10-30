@@ -11,7 +11,7 @@ bool Segment3D::contain(const Vector3D& v) const {
 	Vector3D v1(end_, -1, start_);
 	Vector3D v2(v, -1, start_);
 	Vector3D v3 = v1.cross(v2);
-	if (std::sqrt(v3.dot(v3)) / (*this).length() > 1e-13) return false; //òàêîé êðèòåðèé äëÿ ðàáîòû ñ èððàöèîíàëüíûìè ÷èñëàìè
+	if (std::sqrt(v3.dot(v3)) / (*this).length() > 1e-13) return false; //критерий для работы с иррациональными числами
 	double projection = v2.dot(v1);
 	return  0 <= projection && projection <= v1.dot(v1);
 }
