@@ -18,13 +18,13 @@ public:
 	double y() const { return y_; }
 	double z() const { return z_; }
 
-	//равенство Vector3D
+	//СЂР°РІРµРЅСЃС‚РІРѕ Vector3D
 	bool operator==(const Vector3D& v) const;
-	//скалярное произведение
+	//СЃРєР°Р»СЏСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	double dot(const Vector3D& v) const;
-	//векторное произведение
+	//РІРµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	Vector3D& cross(const Vector3D& v) const;
-	//вывод в консоль
+	//РІС‹РІРѕРґ РІ РєРѕРЅСЃРѕР»СЊ
 	void print() const;
 };
 #endif
