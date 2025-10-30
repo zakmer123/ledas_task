@@ -18,11 +18,11 @@ public:
 	Vector3D end() const { return end_; }
 	Vector3D& end() { return end_; }
 
-	//длина отрезка
+	//РґР»РёРЅР° РѕС‚СЂРµР·РєР°
 	double length() const;
-	//принадлежность точки отрезку
+	//РїСЂРёРЅР°РґР»РµР¶РЅРѕСЃС‚СЊ С‚РѕС‡РєРё РѕС‚СЂРµР·РєСѓ
 	bool contain(const Vector3D& v) const;
-	//точка пересечения двух отрезков (возвращает как Vector3D, так и std::nullopt)
+	//С‚РѕС‡РєР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РґРІСѓС… РѕС‚СЂРµР·РєРѕРІ (РІРѕР·РІСЂР°С‰Р°РµС‚ РєР°Рє Vector3D, С‚Р°Рє Рё std::nullopt)
 	std::optional<Vector3D> intersect(const Segment3D& s) const;
 };
 #endif
